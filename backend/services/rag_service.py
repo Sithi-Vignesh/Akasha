@@ -41,7 +41,7 @@ def embeding(chunked_list):
 
     return embeddings
 
-def resume_processor(file_byte, filename):
+async def resume_processor(file_byte, filename):
     parse = parse_file(file_byte, filename)
     chunk = chunking(parse)
     embed = embeding(chunk)
