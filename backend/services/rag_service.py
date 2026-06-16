@@ -2,7 +2,7 @@ import pdfplumber
 from docx import Document
 import io
 from sentence_transformers import SentenceTransformer
-from db.vector_store import store, retrieve
+from db.vector_store import store
 
 model = SentenceTransformer('sentence-transformers/all-MiniLM-L6-v2')
 
