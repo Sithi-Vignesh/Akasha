@@ -1,0 +1,75 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
+}
+
+@layer base {
+  :root {
+    --bg: #FFFFFF;
+    --text-primary: #000000;
+    --text-secondary: #505050;
+    --floating-letter: rgba(0, 0, 0, 0.12);
+    --glass-bg: rgba(0, 0, 0, 0.04);
+    --glass-border: rgba(0, 0, 0, 0.10);
+    --glass-blur: blur(16px);
+    --accent: #000000;
+    --accent-hover: #222222;
+    --error: #CC0000;
+    --success: #008844;
+    --score-high: #008844;
+    --score-mid: #CC7700;
+    --score-low: #CC0000;
+    --tab-active-bg: rgba(0, 0, 0, 0.10);
+    --tab-inactive-bg: transparent;
+  }
+
+  .dark {
+    --bg: #000000;
+    --text-primary: #FFFFFF;
+    --text-secondary: #A0A0A0;
+    --floating-letter: rgba(255, 255, 255, 0.15);
+    --glass-bg: rgba(255, 255, 255, 0.05);
+    --glass-border: rgba(255, 255, 255, 0.12);
+    --glass-blur: blur(16px);
+    --accent: #FFFFFF;
+    --accent-hover: #E0E0E0;
+    --error: #FF4444;
+    --success: #44FF88;
+    --score-high: #44FF88;
+    --score-mid: #FFB344;
+    --score-low: #FF4444;
+    --tab-active-bg: rgba(255, 255, 255, 0.12);
+    --tab-inactive-bg: transparent;
+  }
+
+  body {
+    background-color: var(--bg);
+    color: var(--text-primary);
+    transition: background-color 0.3s ease, color 0.3s ease;
+    @apply font-sans;
+    /* Ensure no scrollbar jump */
+    overflow-y: scroll; 
+  }
+}
+
+@layer utilities {
+  .glass-card {
+    background: var(--glass-bg);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    border: 1px solid var(--glass-border);
+    border-radius: 16px;
+    transition: all 0.3s ease;
+  }
+  
+  .glass-card:hover {
+    backdrop-filter: blur(20px);
+    border-color: color-mix(in srgb, var(--glass-border) 100%, var(--accent) 10%);
+  }
+  
+  .font-display {
+    font-family: var(--font-display);
+  }
+}
