@@ -1,6 +1,6 @@
 import chromadb
 
-client = chromadb.PersistentClient("backend/chroma_data/")
+client = chromadb.PersistentClient("./chroma_data/")
 collection = client.get_or_create_collection(name="resume_data")
 
 def store(chunks, embedding):
