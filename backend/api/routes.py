@@ -4,6 +4,16 @@ from services.websearch import research
 from db.vector_store import retrive
 from services.llm_service import analyzer, resume_generator
 import asyncio
+from pydantic import BaseModel
+
+class GenerateRequest(BaseModel):
+    company_name: str
+    job_description: str
+    fit_score: int
+    fit_summary: str
+    gaps: list
+    suggestions: list
+    resume_chunks: list
 
 router  = APIRouter()
 
@@ -17,23 +27,23 @@ async def analyze(company_name: str = Form(...), job_description: str = Form(...
 
     results = analyzer(company_name, job_description, tavily_context, retrived_data)
 
-    return results
+    return {
+        "fit_score": results["fit_score"],
+        "fit_summary": results["fit_summary"],
+        "gaps": results["gaps"],
+        "suggestions": results["suggestions"],
+        "resume_chunks": retrived_data["documents"][0]
+    }
 
 @router.post("/generate-resume")
-async def generate_resume(resume_file: UploadFile = File(...), company_name: str = Form(...), job_description: str = Form(...)):
-    file_bytes = await resume_file.read()
-    output = await asyncio.gather(resume_processor(file_bytes, resume_file.filename), research(company_name))
-    tavily_context = output[1]
-    query = embeding(job_description)
-    retrived_data = retrive(query, 6)
-
-    results = analyzer(company_name, job_description, tavily_context, retrived_data)
-
-    fit_score = results["fit_score"]
-    fit_summary = results["fit_summary"]
-    gaps = results["gaps"]
-    suggestions = results["suggestions"]
-
-    latex = resume_generator(retrived_data, company_name, job_description, fit_summary, gaps, suggestions, fit_score)
-    print(latex)
+async def generate_resume(request: GenerateRequest):
+    latex = resume_generator(
+        request.resume_chunks,
+        request.company_name,
+        request.job_description,
+        request.fit_summary,
+        request.gaps,
+        request.suggestions,
+        request.fit_score
+    )
     return {"latex_code": latex}

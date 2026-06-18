@@ -18,15 +18,27 @@ export async function analyzeResume(file: File, companyName: string, jobDescript
   return res.json();
 }
 
-export async function generateResume(file: File, companyName: string, jobDescription: string) {
-  const formData = new FormData();
-  formData.append('resume_file', file);
-  formData.append('company_name', companyName);
-  formData.append('job_description', jobDescription);
-
+export async function generateResume(
+  companyName: string,
+  jobDescription: string,
+  fitScore: number,
+  fitSummary: string,
+  gaps: string[],
+  suggestions: string[],
+  resumeChunks: string[]
+) {
   const res = await fetch(`${API_BASE_URL}/api/generate-resume`, {
     method: 'POST',
-    body: formData,
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      company_name: companyName,
+      job_description: jobDescription,
+      fit_score: fitScore,
+      fit_summary: fitSummary,
+      gaps,
+      suggestions,
+      resume_chunks: resumeChunks,
+    }),
   });
 
   if (!res.ok) {

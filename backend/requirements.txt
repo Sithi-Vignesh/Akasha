@@ -10,3 +10,4 @@ requests
 asyncio
 tavily-python
 json
+pydantic

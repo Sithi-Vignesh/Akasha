@@ -72,13 +72,21 @@ export default function App() {
   };
 
   const handleGenerate = async () => {
-    if (!storedFile) return;
+    if (!analysisData) return;
     setError(null);
     setCosmosState('disrupted');
     
     try {
       const [res] = await Promise.all([
-        generateResume(storedFile, storedCompany, storedJd),
+        generateResume(
+          storedCompany,
+          storedJd,
+          analysisData.fit_score,
+          analysisData.fit_summary,
+          analysisData.gaps,
+          analysisData.suggestions,
+          analysisData.resume_chunks
+        ),
         delay(1500)
       ]);
       setLatexCode(res.latex_code);
