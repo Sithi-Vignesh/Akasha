@@ -11,3 +11,4 @@ asyncio
 tavily-python
 json
 pydantic
+google-genai

@@ -1,6 +1,9 @@
-from core.config import OPENROUTER_API_KEY
+from core.config import OPENROUTER_API_KEY, GEMINI_API_KEY
+from google import genai
 import requests
 import json
+
+client = genai.Client(api_key=GEMINI_API_KEY)
 
 def analyzer(company_name, job_description, tavily_results, resume_chunks):
     tavily_results_str = str(tavily_results)
@@ -314,26 +317,14 @@ def resume_generator(resume_chunks, company_name, job_description, fit_summary, 
             4. Ensure all dates are right-aligned using the resumeProjectHeading and resumeSubheading commands exactly as defined in the template. Never concatenate dates with the title text.
             5. Before giving the Output check whether the alignment is perfect and it matches the template.
             6. Also check for Syntax errors before presenting the Output, if any syntax error is there then correct the errors.
-            7. Copy the custom command definitions (\newcommand) from the template EXACTLY as provided. Never modify, shorten, or omit any braces in the preamble.
+            7. Copy the preamble (all \\usepackage lines) from the template EXACTLY as written, character by character. Do not change any capitalization. For example, it must be \\usepackage[usenames,dvipsnames]{{color}} — never dvipsNames with capital N.
             the template you are going to use is {template}
             """
     
-    headers = {"Authorization": "Bearer " + OPENROUTER_API_KEY}
-    body = {
-        "model": "nvidia/nemotron-3-nano-30b-a3b:free",
-        "messages": [
-            {
-            "role": "user",
-            "content": prompt
-            }
-        ]
-        }
-    response = requests.post(
-        "https://openrouter.ai/api/v1/chat/completions",
-        headers = headers,
-        json = body
+    response = client.models.generate_content(
+        model="gemini-2.5-flash",
+        contents=prompt
     )
 
-    output = response.json()
-
-    return output["choices"][0]["message"]["content"]
+    result = response.text.replace("```latex", "").replace("```", "").strip()
+    return result
