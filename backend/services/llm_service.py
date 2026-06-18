@@ -30,7 +30,7 @@ def analyzer(company_name, job_description, tavily_results, resume_chunks):
     
     headers = {"Authorization": "Bearer " + OPENROUTER_API_KEY}
     body = {
-        "model": "nvidia/nemotron-3-super-120b-a12b:free",
+        "model": "nvidia/nemotron-3-nano-30b-a3b:free",
         "messages": [
             {
             "role": "user",
@@ -307,11 +307,20 @@ def resume_generator(resume_chunks, company_name, job_description, fit_summary, 
             when we analysed this resume with the JD and company we got fit_score as {fit_score}, fit_summary as {fit_summary}, gaps as {gaps_str} and suggestions as {suggestions_str}.
             so based on the informations i provided, you must tailor the resume of the candidate to increase the fit_score and make him shortlist of that job.
             you need give generate me a LaTeX code and nothing more, no need explain or add any more text. ONLY THE LATEX CODE.
-            the template you are going to use is {template}"""
+            STRICT RULES YOU MUST FOLLOW:
+            1. NEVER invent or fabricate experience, projects, skills, or achievements that are not present in the candidate's resume chunks. Only use real information from the provided resume data.
+            2. If a section from the template (Education, Experience, Projects, Skills, etc.) has no corresponding data in the resume chunks, completely omit that section from the LaTeX output. Do not leave empty sections.
+            3. If the candidate's resume contains sections not in the template, evaluate from a hiring manager's perspective whether that section would increase the fit score for this specific job. If yes, create an appropriate LaTeX section for it. If no, ignore it.
+            4. Ensure all dates are right-aligned using the resumeProjectHeading and resumeSubheading commands exactly as defined in the template. Never concatenate dates with the title text.
+            5. Before giving the Output check whether the alignment is perfect and it matches the template.
+            6. Also check for Syntax errors before presenting the Output, if any syntax error is there then correct the errors.
+            7. Copy the custom command definitions (\newcommand) from the template EXACTLY as provided. Never modify, shorten, or omit any braces in the preamble.
+            the template you are going to use is {template}
+            """
     
     headers = {"Authorization": "Bearer " + OPENROUTER_API_KEY}
     body = {
-        "model": "nvidia/nemotron-3-super-120b-a12b:free",
+        "model": "nvidia/nemotron-3-nano-30b-a3b:free",
         "messages": [
             {
             "role": "user",
