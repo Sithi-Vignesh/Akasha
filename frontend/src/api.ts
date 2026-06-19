@@ -12,7 +12,8 @@ export async function analyzeResume(file: File, companyName: string, jobDescript
   });
 
   if (!res.ok) {
-    throw new Error('Failed to analyze resume');
+    const errorBody = await res.json();   // <-- this line
+    throw new Error(errorBody.detail || 'Failed to analyze resume');
   }
 
   return res.json();
@@ -42,7 +43,8 @@ export async function generateResume(
   });
 
   if (!res.ok) {
-    throw new Error('Failed to generate resume');
+    const errorBody = await res.json();   // <-- this line
+    throw new Error(errorBody.detail || 'Failed to generate resume');
   }
 
   return res.json();
