@@ -7,10 +7,10 @@ export function Footer() {
       <div className="font-display font-medium">Akasha</div>
       <div>Built by THUNDER</div>
       <div className="flex gap-4">
-        <a href="#" className="hover:text-[var(--accent)] transition-colors">
+        <a href="https://github.com/Sithi-Vignesh" target="_blank" className="hover:text-[var(--accent)] transition-colors">
           <Github size={18} />
         </a>
-        <a href="#" className="hover:text-[var(--accent)] transition-colors">
+        <a href="https://www.linkedin.com/in/sithi-vignesh/" target="_blank" className="hover:text-[var(--accent)] transition-colors">
           <Linkedin size={18} />
         </a>
       </div>
