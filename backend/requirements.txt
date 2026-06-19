@@ -12,3 +12,4 @@ tavily-python
 json
 pydantic
 google-genai
+slowapi

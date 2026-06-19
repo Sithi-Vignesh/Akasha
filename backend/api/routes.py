@@ -7,6 +7,8 @@ from core.file_validation import validate_file_type
 import asyncio
 from pydantic import BaseModel
 from fastapi import HTTPException
+from core.limiter import limiter
+from fastapi import Request
 
 class GenerateRequest(BaseModel):
     company_name: str
@@ -20,7 +22,8 @@ class GenerateRequest(BaseModel):
 router  = APIRouter()
 
 @router.post("/analyze")
-async def analyze(company_name: str = Form(...), job_description: str = Form(...), resume_file: UploadFile = File(...)):
+@limiter.limit("3/minute")
+async def analyze(request: Request, company_name: str = Form(...), job_description: str = Form(...), resume_file: UploadFile = File(...)):
     file_bytes = await resume_file.read()
 
     error = validate_file_type(file_bytes)
