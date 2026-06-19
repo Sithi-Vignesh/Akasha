@@ -31,7 +31,6 @@ async def analyze(company_name: str = Form(...), job_description: str = Form(...
     tavily_context = output[1]
     query = embeding(job_description)
     retrived_data = retrive(query, 100)
-    print(f"Total chunks retrieved: {len(retrived_data['documents'][0])}")
 
     results = analyzer(company_name, job_description, tavily_context, retrived_data)
 
