@@ -30,7 +30,8 @@ async def analyze(company_name: str = Form(...), job_description: str = Form(...
     output = await asyncio.gather(resume_processor(file_bytes, resume_file.filename), research(company_name))
     tavily_context = output[1]
     query = embeding(job_description)
-    retrived_data = retrive(query, 6)
+    retrived_data = retrive(query, 100)
+    print(f"Total chunks retrieved: {len(retrived_data['documents'][0])}")
 
     results = analyzer(company_name, job_description, tavily_context, retrived_data)
 
