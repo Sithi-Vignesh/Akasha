@@ -1,9 +1,18 @@
 import React from 'react';
 import { ChevronDown } from 'lucide-react';
 
-export function Hero() {
+interface HeroProps {
+  isDarkMode: boolean;
+}
+
+export function Hero({ isDarkMode }: HeroProps) {
   return (
-    <div className="relative w-full h-[100vh] flex flex-col items-center justify-center text-center p-6 z-10 pointer-events-none">
+    <div className="relative w-full h-[100vh] flex flex-col items-center justify-center text-center p-6 z-10 pointer-events-none -translate-y-8">
+      <img
+        src={isDarkMode ? "/logo-full-white.png" : "/logo-full-black.png"}
+        alt="Akasha"
+        className="w-72 md:w-96 h-auto"
+      />
       <h1 className="font-display font-extrabold text-[clamp(2rem,5vw,4rem)] tracking-tight leading-tight mb-6">
         Akasha
       </h1>

@@ -121,7 +121,7 @@ export default function App() {
         {view === 'hero-form' && (
           <div className={`w-full max-w-4xl flex flex-col items-center transition-all duration-400 ease-in
             ${isFormFadingOut ? 'opacity-0 -translate-y-5 pointer-events-none' : 'opacity-100 translate-y-0'}`}>
-            <Hero />
+            <Hero isDarkMode={isDarkMode} />
             {!error ? (
                <div id="form-section" className="w-full z-10 pb-16 px-4 relative">
                  <UploadForm onAnalyze={handleAnalyze} isLoading={cosmosState === 'disrupted'} />
