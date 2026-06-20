@@ -57,3 +57,7 @@ async def generate_resume(request: GenerateRequest):
         request.fit_score
     )
     return {"latex_code": latex}
+
+@router.get("/health")
+def health():
+    return {"status":"ok"}

@@ -1,5 +1,6 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useState, useEffect } from 'react';
 import { UploadCloud, File, CheckCircle } from 'lucide-react';
+import { API_BASE_URL } from '../api';
 
 interface UploadFormProps {
   onAnalyze: (file: File, company: string, jd: string) => void;
@@ -12,6 +13,29 @@ export function UploadForm({ onAnalyze, isLoading }: UploadFormProps) {
   const [jd, setJd] = useState('');
   const [isHovering, setIsHovering] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
+  const [isBackendReady, setIsBackendReady] = useState(false);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    const checkHealth = () => {
+      fetch(`${API_BASE_URL}/api/health`)
+        .then((res) => {
+          if (res.ok && !cancelled) {
+            setIsBackendReady(true);
+          } else if (!cancelled) {
+            setTimeout(checkHealth, 5000);
+          }
+        })
+        .catch(() => {
+          if (!cancelled) setTimeout(checkHealth, 5000);
+        });
+    };
+
+    checkHealth();
+
+    return () => { cancelled = true; };
+  }, []);
 
   const validateFile = (f: File) => {
     setErrorMsg(null);
@@ -114,14 +138,14 @@ export function UploadForm({ onAnalyze, isLoading }: UploadFormProps) {
 
         <button 
           type="submit"
-          disabled={isLoading}
+          disabled={isLoading || !isBackendReady}
           className={`w-full py-4 rounded-xl font-display font-bold text-lg bg-[var(--accent)] text-[var(--bg)] transition-transform hover:scale-[1.02] active:scale-[0.98] mt-2
             ${isLoading ? 'opacity-80 pointer-events-none' : ''}`}
         >
           {isLoading ? (
-            <span className="flex items-center justify-center gap-2 animate-pulse">
-              Analyzing...
-            </span>
+            <span className="flex items-center justify-center gap-2 animate-pulse">Analyzing...</span>
+          ) : !isBackendReady ? (
+            "Waking up the server..."
           ) : (
             "Analyze with Akasha"
           )}
